@@ -17,31 +17,32 @@ class DashboardController extends ChangeNotifier {
         _expenseRepo = ExpenseRepository(DatabaseHelper.instance),
         _budgetRepo  = BudgetRepository(DatabaseHelper.instance);
 
-  DashboardStatus            _status         = DashboardStatus.idle;
-  String                     _activeFilter   = 'month';
-  bool                       _showAlert      = true;
-  double                     _totalToday     = 0;
-  double                     _totalWeek      = 0;
-  double                     _totalMonth     = 0;
-  List<Expense>              _recentExpenses = [];
+  DashboardStatus _status = DashboardStatus.idle;
+  String _activeFilter = 'month';
+  bool _showAlert = true;
+  double _totalToday = 0;
+  double _totalWeek  = 0;
+  double  _totalMonth  = 0;
+  List<Expense>  _recentExpenses = [];
   List<Map<String, dynamic>> _categoryTotals = [];
-  String?                    _budgetAlert;
-  DashboardStatus            get status         => _status;
-  String                     get activeFilter   => _activeFilter;
-  bool                       get showAlert      => _showAlert;
-  double                     get totalToday     => _totalToday;
-  double                     get totalWeek      => _totalWeek;
-  double                     get totalMonth     => _totalMonth;
-  List<Expense>              get recentExpenses => _recentExpenses;
+  String? _budgetAlert;
+  DashboardStatus get status => _status;
+  String get activeFilter => _activeFilter;
+  bool  get showAlert => _showAlert;
+  double get totalToday => _totalToday;
+  double  get totalWeek  => _totalWeek;
+  double get totalMonth => _totalMonth;
+  List<Expense> get recentExpenses => _recentExpenses;
   List<Map<String, dynamic>> get categoryTotals => _categoryTotals;
-  String?                    get budgetAlert    => _budgetAlert;
+  String?                    get budgetAlert  => _budgetAlert;
   bool get isLoading => _status == DashboardStatus.loading;
 
   Future<void> loadData() async {
     _status = DashboardStatus.loading;
     notifyListeners();
 
-    try {
+    try
+    {
       final now = DateTime.now();
       final todayStart = DateTime(now.year, now.month, now.day)
           .toIso8601String();
