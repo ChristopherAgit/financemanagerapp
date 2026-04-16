@@ -9,7 +9,10 @@ import '../widgets/action_card.dart';
 import '../widgets/header.dart';
 import '../widgets/summary_card.dart';
 import 'AddExpenseScreen.dart';
+import 'BudgetScreen.dart';
+import 'CategoryScreen.dart';
 import 'LoginScreen.dart';
+import 'ReportScreen.dart';
 
 
 class DashboardScreen extends StatefulWidget {final int userId;
@@ -58,14 +61,30 @@ class _DashboardScreenState extends State<DashboardScreen> {
     _controller.loadData();
   }
 
-  void _goToReports() => ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Módulo de reportes próximamente')));
+  void _goToReports() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => ReportScreen(userId: widget.userId),
+      ),
+    );
+  }
 
-  void _goToLimits() => ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Módulo de límites próximamente')));
+  void _goToLimits() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => BudgetScreen(userId: widget.userId),
+      ),
+    ).then((_) => _controller.loadData());
+  }
 
-  void _goToCategories() => ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Módulo de categorías próximamente')));
+  void _goToCategories() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const CategoryScreen()),
+    ).then((_) => _controller.loadData());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -172,42 +191,45 @@ class _DashboardScreenState extends State<DashboardScreen> {
       {'key': 'today', 'label': 'Hoy'},
     ];
 
-    return Row(
-      children: filters.map((f) {
-        final isActive = _controller.activeFilter == f['key'];
-        return Padding(
-          padding: const EdgeInsets.only(right: 8),
-          child: GestureDetector(
-            onTap: () => _controller.setFilter(f['key']!),
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 180),
-              padding: const EdgeInsets.symmetric(
-                  horizontal: 16, vertical: 8),
-              decoration: BoxDecoration(
-                color: isActive
-                    ? AppColors.accent
-                    : AppColors.surface,
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: filters.map((f) {
+          final isActive = _controller.activeFilter == f['key'];
+          return Padding(
+            padding: const EdgeInsets.only(right: 8),
+            child: GestureDetector(
+              onTap: () => _controller.setFilter(f['key']!),
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 180),
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 16, vertical: 8),
+                decoration: BoxDecoration(
                   color: isActive
                       ? AppColors.accent
-                      : AppColors.borderColor,
+                      : AppColors.surface,
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(
+                    color: isActive
+                        ? AppColors.accent
+                        : AppColors.borderColor,
+                  ),
                 ),
-              ),
-              child: Text(
-                f['label']!,
-                style: TextStyle(
-                  color: isActive
-                      ? Colors.white
-                      : AppColors.mutedText,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 13,
+                child: Text(
+                  f['label']!,
+                  style: TextStyle(
+                    color: isActive
+                        ? Colors.white
+                        : AppColors.mutedText,
+                    fontWeight: FontWeight.w600,
+                    fontSize:   13,
+                  ),
                 ),
               ),
             ),
-          ),
-        );
-      }).toList(),
+          );
+        }).toList(),
+      ),
     );
   }
 

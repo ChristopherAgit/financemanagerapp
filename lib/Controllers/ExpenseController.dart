@@ -14,8 +14,8 @@ enum ExpenseStatus { idle, classifying, saving, saved, error }
 class ExpenseController extends ChangeNotifier {
   final int _userId;
 
-  final ExpenseRepository     _expenseRepo;
-  final CategoryRepository    _categoryRepo;
+  final ExpenseRepository _expenseRepo;
+  final CategoryRepository _categoryRepo;
   final ClassificationService _classifier;
 
   ExpenseController({required int userId})
@@ -24,20 +24,20 @@ class ExpenseController extends ChangeNotifier {
         _categoryRepo = CategoryRepository(DatabaseHelper.instance),
         _classifier   = ClassificationService(DatabaseHelper.instance);
 
-  ExpenseStatus   _status            = ExpenseStatus.idle;
-  List<Category>  _categories        = [];
+  ExpenseStatus   _status = ExpenseStatus.idle;
+  List<Category>  _categories = [];
   Category?       _suggestedCategory;
   Category?       _selectedCategory;
   String?         _errorMessage;
 
-  ExpenseStatus  get status            => _status;
-  List<Category> get categories        => _categories;
-  Category?      get suggestedCategory => _suggestedCategory;
-  Category?      get selectedCategory  => _selectedCategory;
-  String?        get errorMessage      => _errorMessage;
+  ExpenseStatus  get status => _status;
+  List<Category> get categories => _categories;
+  Category? get suggestedCategory => _suggestedCategory;
+  Category? get selectedCategory => _selectedCategory;
+  String?  get errorMessage => _errorMessage;
 
   bool get isClassifying => _status == ExpenseStatus.classifying;
-  bool get isSaving      => _status == ExpenseStatus.saving;
+  bool get isSaving => _status == ExpenseStatus.saving;
 
   Future<void> init() async {
     _categories = await _categoryRepo.findAll();
@@ -97,19 +97,19 @@ class ExpenseController extends ChangeNotifier {
 
     try {
       Expense base = Expense(
-        userId:              _userId,
-        description:         description.trim(),
-        amount:              amount,
-        currency:            currency,
-        date:                DateTime.now().toIso8601String(),
-        categoryId:          _selectedCategory!.id!,
+        userId: _userId,
+        description: description.trim(),
+        amount: amount,
+        currency: currency,
+        date: DateTime.now().toIso8601String(),
+        categoryId: _selectedCategory!.id!,
         suggestedCategoryId: _suggestedCategory?.id,
-        notes:               notes?.trim(),
+        notes: notes?.trim(),
       );
 
       if (_selectedCategory?.id != _suggestedCategory?.id) {
         base = await _classifier.applyManualCorrection(
-          expense:       base,
+          expense: base,
           newCategoryId: _selectedCategory!.id!,
         );
       }
@@ -125,15 +125,15 @@ class ExpenseController extends ChangeNotifier {
     }
   }
   void resetForm() {
-    _status            = ExpenseStatus.idle;
+    _status = ExpenseStatus.idle;
     _suggestedCategory = null;
     _selectedCategory  = null;
-    _errorMessage      = null;
+    _errorMessage = null;
     notifyListeners();
   }
 
   void _setError(String msg) {
-    _status       = ExpenseStatus.error;
+    _status = ExpenseStatus.error;
     _errorMessage = msg;
     notifyListeners();
   }

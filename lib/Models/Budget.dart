@@ -1,4 +1,3 @@
-/// Periodos válidos para un presupuesto
 enum BudgetPeriod { weekly, monthly }
 
 extension BudgetPeriodExtension on BudgetPeriod {

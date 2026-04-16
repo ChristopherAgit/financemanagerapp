@@ -5,7 +5,6 @@ import '../styles/app_colors.dart';
 
 class AddExpenseScreen extends StatefulWidget {
   final int userId;
-
   const AddExpenseScreen({super.key, required this.userId});
 
   @override
@@ -49,8 +48,8 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
   {
     final saved = await _controller.saveExpense(
       description: _descController.text,
-      rawAmount:   _amountController.text,
-      notes:       _notesController.text,
+      rawAmount: _amountController.text,
+      notes: _notesController.text,
     );
 
     if (saved && mounted) {
